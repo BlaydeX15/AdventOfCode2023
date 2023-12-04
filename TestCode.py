@@ -1,32 +1,32 @@
 import re
 
-totalblue = 0
-totalred = 0
-totalgreen = 0
+# Example values for start_pos and end_pos
+start_pos = 5
+end_pos = 10
 
-with open('Puzzle3List.txt', 'r') as f:
-    for line in f:
-        sections = re.split(r'[;:]', line)
-        gamenumber = re.search(r'Game (\d+)', line)
-        if gamenumber:
-            gamenumber = int(gamenumber.group(1))
-        for index, section in enumerate(sections, start=1):
-            match = re.search(r'\b(\d+)\s*red\b', section)
-            if match:
-                matched_blue = int(match.group(1))
-                totalblue += matched_blue
-            match = re.search(r'\b(\d+)\s*green\b', section)
-            if match:
-                matched_green = int(match.group(1))
-                totalgreen += matched_green
-            match = re.search(r'\b(\d+)\s*blue\b', section)
-            if match:
-                matched_red = int(match.group(1))
-                totalred += matched_red
-        if totalred <= 12 and totalgreen <= 13 and totalblue <= 15:
-            print("Game", gamenumber, ":", totalblue, totalgreen, totalred)
-        else:
-            print("Game", gamenumber, ":", "Invalid Game")
-        totalblue = 0
-        totalred = 0
-        totalgreen = 0
+# Your input text with multiple lines
+text = """......755.
+...$.*....
+.664**598."""
+
+# Split the text into lines
+lines = text.split('\n')
+
+# Search for the pattern with an asterisk in each line
+for line_number, line in enumerate(lines, start=1):
+    matches = re.findall(r'\d+', line)
+    if matches:
+        for match in matches:
+            start_pos = max(line.find(match) - 1, 0)
+            end_pos = line.find(match) + len(match) + 1
+            match2 = re.search(f'.{{{start_pos},{end_pos}}}[*]', line)
+            if match2:
+                print(f"mid {match}")
+            if line_number > 1:
+                match2 = re.search(f'.{{{start_pos},{end_pos}}}[*]', lines[line_number - 2])
+                if match2:
+                    print(f"up {match}")
+            if line_number < len(lines):
+                match2 = re.search(f'.{{{start_pos},{end_pos}}}[*]', lines[line_number])
+                if match2:
+                    print(f"low {match}")

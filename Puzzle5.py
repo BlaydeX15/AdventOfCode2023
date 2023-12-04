@@ -20,9 +20,19 @@ for i, line in enumerate(lines):
     line_number += 1
     matches = re.findall(r'\d+', line)
     if matches:
-        print("Line Number", line_number)
         for match in matches:
-            print("Number", match, "StartPos", line.find(match), "EndPos", line.find(match) + len(match))
-        #loook at span, sub 1 from y and length of num from x to check top left, repeat for mid and right, curr row and bottom row.
-        #if we see a symbol in the surrounding chars, mark num as valid, add to total
-        #left pos + len = right pos?
+            start_pos = max(line.find(match) - 1, 0)
+            end_pos = line.find(match) + len(match) + 1
+            print(start_pos, end_pos)
+            match2 = re.search(f'.{{{start_pos},{end_pos}}}[*]', line)
+            if match2:
+                    print(f"mid {match}")
+            if line_number > 1:
+                match2 = re.search(f'.{{{start_pos},{end_pos}}}[*]', lines[line_number - 1])
+                if match2:
+                    print(f"up {match}")
+            if line_number < len(lines):
+                match2 = re.search(f'.{{{start_pos},{end_pos}}}[*]', lines[line_number + 1])
+                if match2:
+                    print(f"low {match}")
+
