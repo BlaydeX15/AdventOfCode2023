@@ -1,6 +1,8 @@
 import sys
 import re
 
+line_number = 0
+
 yn = input("Would you like to write a new file? Y/N ")
 
 if yn.lower() == 'y':
@@ -15,6 +17,12 @@ with open('Puzzle5List.txt', 'r') as f:
     lines = f.readlines()
 
 for i, line in enumerate(lines):
-    match = re.search(r'\d+', line)
-    if match:
-        print(match)
+    line_number += 1
+    matches = re.findall(r'\d+', line)
+    if matches:
+        print("Line Number", line_number)
+        for match in matches:
+            print("Number", match, "StartPos", line.find(match), "EndPos", line.find(match) + len(match))
+        #loook at span, sub 1 from y and length of num from x to check top left, repeat for mid and right, curr row and bottom row.
+        #if we see a symbol in the surrounding chars, mark num as valid, add to total
+        #left pos + len = right pos?
